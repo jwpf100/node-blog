@@ -38,11 +38,12 @@ db.on('error', err => {
 //Middleware
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
+
 app.use(bodyParser.urlencoded({ extended: true}))
 
-//Create schema and model
-const postSchema = new mongoose.Schema({ body: String });
-var Post = mongoose.model('Post', postSchema);
+// //Create schema and model
+// const postSchema = new mongoose.Schema({ body: String });
+// var Post = mongoose.model('Post', postSchema);
 
 //create addpost method
 
