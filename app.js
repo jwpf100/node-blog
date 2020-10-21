@@ -7,14 +7,20 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
 //Set up route for "/" or root directory
+
+// app.get("/", (req, res) => {
+//   Post.find({}, (err, posts) => {
+//      res.render('index', { posts: posts})
+//   });
+// });
+
 app.get("/", (req, res) => {
-  Post.find({}, (err, posts) => {
-     res.render('index', { posts: posts})
-  });
+  res.render('index');
 });
 
-//connect to mongo via mongoose
 
+//connect to mongo via mongoose
+/*
 const mongoose = require('mongoose')
 const url = 'mongodb://127.0.0.1:27017/node-blog'
 
@@ -28,7 +34,7 @@ db.once('open', _ => {
 db.on('error', err => {
   console.error('connection error:', err)
 })
-
+*/
 //Middleware
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
