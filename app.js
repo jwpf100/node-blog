@@ -8,16 +8,11 @@ app.set('view engine', 'html');
 
 //Set up route for "/" or root directory
 
-// app.get("/", (req, res) => {
-//   Post.find({}, (err, posts) => {
-//      res.render('index', { posts: posts})
-//   });
-// });
-
-app.get("/", (req, res) => {
-  res.render('index');
+app.get("/", async (req, res) => {
+  const posts = await Post.find();
+  const blogPosts = await BlogPost.find();
+  res.render('index', { posts: posts, blogPosts: blogPosts })
 });
-
 
 //connect to mongo via mongoose
 /*
@@ -45,11 +40,22 @@ app.use(bodyParser.urlencoded({ extended: true}))
 // const postSchema = new mongoose.Schema({ body: String });
 // var Post = mongoose.model('Post', postSchema);
 
+let BlogPost = require('./models/blogPost')
+
 //create addpost method
 
 app.post('/addpost', (req, res) => {
   var postData = new Post(req.body);
   postData.save().then( result => {
+      res.redirect('/');
+  }).catch(err => {
+      res.status(400).send("Unable to save data");
+  });
+});
+
+app.post('/addblogpost', (req, res) => {
+  var postBlogData = new BlogPost(req.body);
+  postBlogData.save().then( result => {
       res.redirect('/');
   }).catch(err => {
       res.status(400).send("Unable to save data");
