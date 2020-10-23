@@ -15,7 +15,7 @@ app.get("/", async (req, res) => {
 });
 
 //connect to mongo via mongoose
-/*
+
 const mongoose = require('mongoose')
 const url = 'mongodb://127.0.0.1:27017/node-blog'
 
@@ -29,7 +29,7 @@ db.once('open', _ => {
 db.on('error', err => {
   console.error('connection error:', err)
 })
-*/
+
 //Middleware
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
@@ -37,8 +37,8 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true}))
 
 // //Create schema and model
-// const postSchema = new mongoose.Schema({ body: String });
-// var Post = mongoose.model('Post', postSchema);
+const postSchema = new mongoose.Schema({ body: String });
+var Post = mongoose.model('Post', postSchema);
 
 let BlogPost = require('./models/blogPost')
 
