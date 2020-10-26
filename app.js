@@ -6,6 +6,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+//manage .env data
+var dotenv = require("dotenv")
+dotenv.config()
+
 //Import route handlers
 
 var indexRouter = require('./routes/index');
@@ -14,6 +18,23 @@ var usersRouter = require('./routes/users');
 // Create App
 
 var app = express();
+
+//Connect to MongoDB
+
+const mongoose = require('mongoose')
+const url = 'mongodb://127.0.0.1:27017/node-blog'
+
+mongoose.connect(url, { useNewUrlParser: true , useUnifiedTopology: true});
+
+const db = mongoose.connection
+
+db.once('open', _ => {
+  console.log('Database Node-Blog connected:', url)
+})
+
+db.on('error', err => {
+  console.error('connection error:', err)
+})
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
