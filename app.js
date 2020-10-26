@@ -1,69 +1,53 @@
-//Setup
+//Import Node_libraries
+
+var createError = require('http-errors');
 var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
+
+//Import route handlers
+
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
+
+// Create App
+
 var app = express();
 
-//Template engine
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
-
-//Set up route for "/" or root directory
-
-app.get("/", async (req, res) => {
-  const posts = await Post.find();
-  const blogPosts = await BlogPost.find();
-  res.render('index', { posts: posts, blogPosts: blogPosts })
-});
-
-//connect to mongo via mongoose
-
-const mongoose = require('mongoose')
-const url = 'mongodb://127.0.0.1:27017/node-blog'
-
-mongoose.connect(url, { useNewUrlParser: true });
-
-const db = mongoose.connection
-db.once('open', _ => {
-  console.log('Database connected:', url)
-})
-
-db.on('error', err => {
-  console.error('connection error:', err)
-})
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 
 //Middleware
-const bodyParser = require('body-parser')
-app.use(bodyParser.json())
 
-app.use(bodyParser.urlencoded({ extended: true}))
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
-// //Create schema and model
-const postSchema = new mongoose.Schema({ body: String });
-var Post = mongoose.model('Post', postSchema);
+//Add (previously imported) route handling
 
-let BlogPost = require('./models/blogPost')
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 
-//create addpost method
-
-app.post('/addpost', (req, res) => {
-  var postData = new Post(req.body);
-  postData.save().then( result => {
-      res.redirect('/');
-  }).catch(err => {
-      res.status(400).send("Unable to save data");
-  });
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
 });
 
-app.post('/addblogpost', (req, res) => {
-  var postBlogData = new BlogPost(req.body);
-  postBlogData.save().then( result => {
-      res.redirect('/');
-  }).catch(err => {
-      res.status(400).send("Unable to save data");
-  });
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
 });
 
+//Export to be used by bin/www
 
-//Listen
-app.listen(3000, () => {
-  console.log('Server listening on 3000');
-});
+module.exports = app;
