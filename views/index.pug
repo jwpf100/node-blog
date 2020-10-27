@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #[em Joe's Node Blog], a very basic Express website developed to learn about express, Node and MongoDB using a tutorial example on the Mozilla Developer Network.
+
+  h1 Dynamic content
+
+  if error
+    p Error getting dynamic content.
+  else
+    p The library has the following record counts:
+
+    ul
+      li #[strong Blogposts:] !{data.blogpost_count}
+      li #[strong Authors:] !{data.author_count}
+      li #[strong Tags:] !{data.tag_count}
