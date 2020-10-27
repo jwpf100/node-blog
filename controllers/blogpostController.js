@@ -16,16 +16,21 @@ exports.blogpost_detail = function(req, res) {
 };
 
 //Display blogpost create form on GET
-exports.blogpost_create_post = function(req, res) {
+exports.blogpost_create_get = function(req, res) {
   res.send('NOT IMPLEMENTED: blogpost create POST');
 };
 
 //Handle blogpost create on POST
-exports.blogpost_delete_get = function(req, res) {
+exports.blogpost_create_post = function(req, res) {
   res.send('NOT IMPLEMENTED: blogpost delete GET');
 };
 
 //Display blogpost delete form on GET
+exports.blogpost_delete_get = function(req, res) {
+  res.send('NOT IMPLEMENTED: blogpost delete POST');
+};
+
+//Handle blogpost delete form on POST
 exports.blogpost_delete_post = function(req, res) {
   res.send('NOT IMPLEMENTED: blogpost delete POST');
 };
