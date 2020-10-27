@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1= title
+  
+  ul
+    - blogpost_list.sort(function(a, b) {let textA = a.title.toUpperCase(); let textB = b.title.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+    each blogpost in blogpost_list
+      li 
+        a(href=blogpost.url) #{blogpost.title} 
+        |  (#{blogpost.author.name})
+
+    else
+      li There are no blog posts.

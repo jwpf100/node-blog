@@ -1,0 +1,18 @@
+extends layout
+
+block content
+
+  h1 Tagged Posts: #{tag.name}
+  
+  div(style='margin-left:20px;margin-top:20px')
+
+    h4 Blog Posts
+    
+    dl
+      each blogpost in tag_blogposts
+        dt 
+          a(href=blogpost.url) #{blogpost.title}
+        dd #{blogpost.summary}
+
+      else
+        p No posts have this tag

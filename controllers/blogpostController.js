@@ -24,7 +24,12 @@ exports.index = function(req, res) {
 
 //Display list of all blog posts
 exports.blogpost_list = function(req, res) {
-  res.send('NOT IMPLEMENTED: blogpost list');
+  BlogPost.find({}, 'title author')
+  .populate('author')
+  .exec(function (err, list_blogposts) {
+    if (err) { return async.nextTick(err); }
+    res.render('blogpost_list', {title: 'Blog Posts', blogpost_list: list_blogposts});
+  })
 };
 
 //Display detail page for a specific blogpost
