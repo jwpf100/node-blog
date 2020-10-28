@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1 #{blogpost.title}
+  
+  p #[strong Author:] 
+    a(href=blogpost.author.url) #{blogpost.author.name}
+  p #[strong Summary:] #{blogpost.summary}
+  p #[strong Posted:] #{blogpost.post_date_edited}
+  p #[strong Tags:] 
+    each val, index in blogpost.tags
+      a(href=val.url) #{val.name}
+      if index < blogpost.tags.length - 1
+        |, 
+  p #[strong Status:] #{blogpost.status}
