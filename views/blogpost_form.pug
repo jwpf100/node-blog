@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  h1= title
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='title') Title:
+      input#title.form-control(type='text', placeholder='Title of blogpost' name='title' required='true' value=(undefined===blogpost ? '' : blogpost.title) )
+    div.form-group
+      label(for='author') Author:
+      select#author.form-control(type='select', placeholder='Select author' name='author' required='true' )
+        - authors.sort(function(a, b) {let textA = a.family_name.toUpperCase(); let textB = b.family_name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+        for author in authors
+          if blogpost
+            option(value=author._id selected=(author._id.toString()===blogpost.author._id.toString() ? 'selected' : false) ) #{author.name}
+          else
+            option(value=author._id) #{author.name}
+    div.form-group
+      label(for='summary') Summary:
+      textarea#summary.form-control(type='textarea', placeholder='Summary' name='summary' required='true') #{undefined===blogpost ? '' : blogpost.summary}
+    div.form-group
+      label(for='body') Blog Body:
+      textarea#body.form-control(type='textarea', placeholder='Main blog text' name='body' required='true') #{undefined===blogpost ? '' : blogpost.body}
+    div.form-group
+      label Tags:
+      div
+        for tag in tags
+          div(style='display: inline; padding-right:10px;')
+            input.checkbox-input(type='checkbox', name='tag', id=tag._id, value=tag._id, checked=tag.checked )
+            label(for=tag._id) #{tag.name}
+    button.btn.btn-primary(type='submit') Submit
+
+  if errors 
+    ul
+      for error in errors
+        li!= error.msg

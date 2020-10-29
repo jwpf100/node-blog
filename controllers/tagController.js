@@ -1,6 +1,7 @@
 const Tag = require('../models/tag');
 const BlogPost = require('../models/blogpost');
 const async = require('async');
+const { body,validationResult } = require("express-validator");
 
 // Display list of all tags.
 exports.tag_list = function(req, res) {
@@ -41,14 +42,64 @@ exports.tag_detail = function(req, res, next) {
 };
 
 // Display tag create form on GET.
-exports.tag_create_get = function(req, res) {
-    res.send('NOT IMPLEMENTED: tag create GET');
+exports.tag_create_get = function(req, res, next) {
+  res.render('tag_form', { title: 'Create New Tag' });
 };
 
 // Handle tag create on POST.
-exports.tag_create_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: tag create POST');
-};
+exports.tag_create_post =  [
+   
+  // Validate and santise the name field.
+  //body('name', 'Tag name required').trim().isLength({ min: 3 }).escape(),
+
+  body('name', 'Tag name required')
+    .trim()
+    .isLength({min:3}).withMessage('Min length 3 characters')
+    .isAlpha().withMessage("Tag can't contain numbers")
+    .escape(),
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a genre object with escaped and trimmed data.
+    var tag = new Tag(
+      { name: req.body.name }
+    );
+
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values/error messages.
+      res.render('tag_form', { title: 'Create Tag', tag: tag, errors: errors.array()});
+      return;
+    }
+    else {
+      // Data from form is valid.
+      // Check if Genre with same name already exists.
+      Tag.findOne({ 'name': req.body.name })
+        .exec( function(err, found_tag) {
+          if (err) { return next(err); }
+
+          if (found_tag) {
+             // Genre exists, redirect to its detail page.
+            res.redirect(found_tag.url);
+          }
+          else {
+
+            tag.save(function (err) {
+              if (err) { return next(err); }
+               // Genre saved. Redirect to genre detail page.
+              res.redirect(tag.url);
+            });
+
+          }
+
+        });
+    }
+  }
+];
 
 // Display tag delete form on GET.
 exports.tag_delete_get = function(req, res) {
