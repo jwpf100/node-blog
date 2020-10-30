@@ -145,12 +145,6 @@ console.log(errors)
   }
 ];
 
-
-
-
-
-
-
 //Display blogpost delete form on GET
 exports.blogpost_delete_get = function(req, res) {
   res.send('NOT IMPLEMENTED: blogpost delete GET');
@@ -162,11 +156,109 @@ exports.blogpost_delete_post = function(req, res) {
 };
 
 //Display blogpost update form on GET
-exports.blogpost_update_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: blogpost update GET');
+exports.blogpost_update_get = function(req, res, next) {
+
+  // Get blog post, authors and genres for form.
+  async.parallel({
+      blogpost: function(callback) {
+          BlogPost.findById(req.params.id)
+          .populate('author')
+          .populate('tags')
+          .exec(callback);
+      },
+      authors: function(callback) {
+          Author.find(callback);
+      },
+      tags: function(callback) {
+          Tag.find(callback);
+      },
+      }, function(err, results) {
+          if (err) { return next(err); }
+          if (results.blogpost==null) { // No results.
+              var err = new Error('Blog Post not found');
+              err.status = 404;
+              return next(err);
+          }
+          // Success.
+          // Mark our selected genres as checked.
+          for (var all_t_iter = 0; all_t_iter < results.tags.length; all_t_iter++) {
+              for (var blogpost_t_iter = 0; blogpost_t_iter < results.blogpost.tags.length; blogpost_t_iter++) {
+                  if (results.tags[all_t_iter]._id.toString()===results.blogpost.tags[blogpost_t_iter]._id.toString()) {
+                      results.tags[all_t_iter].checked='true';
+                  }
+              }
+          }
+          res.render('blogpost_form', { title: 'Update Blog Post', authors: results.authors, tags: results.tags, blogpost: results.blogpost });
+      });
+
 };
 
-//Handle blogpost update on POST
-exports.blogpost_update_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: blogpost update POST');
-};
+// Handle blogpost update on POST.
+exports.blogpost_update_post = [
+
+  // Convert the tag to an array
+  (req, res, next) => {
+      if(!(req.body.tag instanceof Array)){
+          if(typeof req.body.tag==='undefined')
+          req.body.tag=[];
+          else
+          req.body.tag=new Array(req.body.tag);
+      }
+      next();
+  },
+
+  // Validate and sanitise fields.
+  body('title', 'Title must not be empty.').trim().isLength({ min: 1 }).escape(),
+  body('author', 'Author must not be empty.').trim().isLength({ min: 1 }).escape(),
+  body('summary', 'Summary must not be empty.').trim().isLength({ min: 1 }).escape(),
+  body('tag.*').escape(),
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+
+      // Extract the validation errors from a request.
+      const errors = validationResult(req);
+
+      // Create a BLogPost object with escaped/trimmed data and old id.
+      var blogpost = new BlogPost(
+        { title: req.body.title,
+          author: req.body.author,
+          summary: req.body.summary,
+          tags: (typeof req.body.tag==='undefined') ? [] : req.body.tag,
+          _id:req.params.id //This is required, or a new ID will be assigned!
+        });
+
+      if (!errors.isEmpty()) {
+          // There are errors. Render form again with sanitized values/error messages.
+
+          // Get all authors and genres for form.
+          async.parallel({
+              authors: function(callback) {
+                  Author.find(callback);
+              },
+              tags: function(callback) {
+                  Tag.find(callback);
+              },
+          }, function(err, results) {
+              if (err) { return next(err); }
+
+              // Mark our selected genres as checked.
+              for (let i = 0; i < results.tags.length; i++) {
+                  if (blogpost.tag.indexOf(results.tags[i]._id) > -1) {
+                      results.tags[i].checked='true';
+                  }
+              }
+              res.render('blogpost_form', { title: 'Update Blog Post',authors: results.authors, tags: results.tags, blogpost: blogpost, errors: errors.array() });
+          });
+          return;
+      }
+      else {
+          // Data from form is valid. Update the record.
+          BlogPost.findByIdAndUpdate(req.params.id, blogpost, {}, function (err,theblogpost) {
+              if (err) { return next(err); }
+                 // Successful - redirect to blog post detail page.
+                res.redirect(theblogpost.url);
+              });
+      }
+  }
+];

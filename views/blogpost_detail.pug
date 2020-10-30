@@ -14,3 +14,8 @@ block content
       if index < blogpost.tags.length - 1
         |, 
   p #[strong Status:] #{blogpost.status}
+    hr
+  p
+    a(href=blogpost.url+'/delete') Delete Blog Post
+  p
+    a(href=blogpost.url+'/update') Update Blog Post
