@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  h1 #{title}: #{tag.name}
+  
+  if tag_blogposts.length
+  
+    p #[strong Delete the following blog posts before attempting to delete this tag.]
+  
+    div(style='margin-left:20px;margin-top:20px')
+
+      h4 Blog Posts
+    
+      dl
+      each blogpost in tag_blogposts
+        dt 
+          a(href=blogpost.url) #{blogpost.title}
+        dd #{blogpost.summary}
+
+  else
+    p Do you really want to delete this Tag?
+    
+    form(method='POST' action='')
+      div.form-group
+        input#tagid.form-control(type='hidden',name='tagid', required='true', value=tag._id )
+
+      button.btn.btn-primary(type='submit') Delete

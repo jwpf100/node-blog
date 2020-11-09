@@ -102,13 +102,53 @@ exports.tag_create_post =  [
 ];
 
 // Display tag delete form on GET.
-exports.tag_delete_get = function(req, res) {
-    res.send('NOT IMPLEMENTED: tag delete GET');
+exports.tag_delete_get = function(req, res, next) {
+
+  async.parallel({
+      tag: function(callback) {
+          Tag.findById(req.params.id).exec(callback)
+      },
+      tags_blogposts: function(callback) {
+        BlogPost.find({ 'tags': req.params.id }).exec(callback)
+      },
+  }, function(err, results) {
+      if (err) { return next(err); }
+      if (results.tag==null) { // No results.
+          res.redirect('/blog/tags');
+      }
+      // Successful, so render.
+      res.render('tag_delete', { title: 'Delete Tag', tag: results.tag, tag_blogposts: results.tags_blogposts } );
+  });
+
 };
 
 // Handle tag delete on POST.
-exports.tag_delete_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: tag delete POST');
+exports.tag_delete_post = function(req, res, next) {
+  async.parallel({
+      tag: function(callback) {
+        Tag.findById(req.body.authorid).exec(callback)
+      },
+      tags_blogposts: function(callback) {
+        BlogPost.find({ 'tags': req.body.tagid }).exec(callback)
+      },
+  }, function(err, results) {
+      if (err) { return next(err); }
+      
+      // Success
+      if (results.tags_blogposts.length > 0) {
+          // Author has books. Render in same way as for GET route.
+          res.render('tag_delete', { title: 'Delete Tag', tag: results.tag, tag_blogposts: results.tags_blogposts } );
+          return;
+      }
+      else {
+          // Author has no books. Delete object and redirect to the list of authors.
+          Tag.findByIdAndRemove(req.body.tagid, function deleteTag(err) {
+              if (err) { return next(err); }
+              // Success - go to author list
+              res.redirect('/blog/tags')
+          })
+      }
+  });
 };
 
 // Display tag update form on GET.

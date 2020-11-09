@@ -101,7 +101,7 @@ exports.author_delete_get = function(req, res, next) {
   }, function(err, results) {
       if (err) { return next(err); }
       if (results.author==null) { // No results.
-          res.redirect('/catalog/authors');
+          res.redirect('/blog/authors');
       }
       // Successful, so render.
       res.render('author_delete', { title: 'Delete Author', author: results.author, author_blogposts: results.authors_blogposts } );
