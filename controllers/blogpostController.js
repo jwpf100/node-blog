@@ -251,6 +251,7 @@ exports.blogpost_update_post = [
   body('title', 'Title must not be empty.').trim().isLength({ min: 1 }).escape(),
   body('author', 'Author must not be empty.').trim().isLength({ min: 1 }).escape(),
   body('summary', 'Summary must not be empty.').trim().isLength({ min: 1 }).escape(),
+  body('body', 'Body must not be empty.').trim().isLength({ min: 1 }).escape(),
   body('tag.*').escape(),
 
   // Process request after validation and sanitization.
@@ -263,6 +264,7 @@ exports.blogpost_update_post = [
       var blogpost = new BlogPost(
         { title: req.body.title,
           author: req.body.author,
+          body: req.body.body,
           summary: req.body.summary,
           tags: (typeof req.body.tag==='undefined') ? [] : req.body.tag,
           _id:req.params.id //This is required, or a new ID will be assigned!
