@@ -3,6 +3,7 @@ var Author = require('../models/author');
 var BlogPost = require('../models/blogpost')
 var async = require('async');
 const { body,validationResult } = require('express-validator');
+const { DateTime } = require('luxon');
 
 // Display list of all Authors.
 exports.author_list = function(req, res) {
@@ -56,16 +57,26 @@ exports.author_create_post = [
       .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
   body('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601().toDate(),
   body('date_of_death', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601().toDate(),
-
+  
   // Process request after validation and sanitization.
   (req, res, next) => {
 
+      //provide edited dates
+      
+      let author_temp = {
+        first_name: req.body.first_name,
+        family_name: req.body.family_name,
+        date_birth_form: DateTime.fromJSDate(req.body.date_of_birth).toISODate(),
+        date_death_form: DateTime.fromJSDate(req.body.date_of_death).toISODate()
+      }   
+      
       // Extract the validation errors from a request.
       const errors = validationResult(req);
+      
 
       if (!errors.isEmpty()) {
           // There are errors. Render form again with sanitized values/errors messages.
-          res.render('author_form', { title: 'Create Author', author: req.body, errors: errors.array() });
+          res.render('author_form', { title: 'Create Author', author: author_temp, errors: errors.array() });
           return;
       }
       else {
