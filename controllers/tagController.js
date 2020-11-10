@@ -152,11 +152,62 @@ exports.tag_delete_post = function(req, res, next) {
 };
 
 // Display tag update form on GET.
-exports.tag_update_get = function(req, res) {
-    res.send('NOT IMPLEMENTED: tag update GET');
+exports.tag_update_get = function(req, res, next) {
+
+  // Get blog post, authors and genres for form.
+  async.parallel({
+      tag: function(callback) {
+          Tag.findById(req.params.id)
+          .exec(callback);
+      },
+      }, function(err, results) {
+          if (err) { return next(err); }
+          if (results.tag==null) { // No results.
+              var err = new Error('Tag not found');
+              err.status = 404;
+              return next(err);
+          }
+          // Success.
+          res.render('tag_form', { title: 'Edit Tag', tag: results.tag });
+      });
 };
 
+
+
 // Handle tag update on POST.
-exports.tag_update_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: tag update POST');
-};
+exports.tag_update_post = [
+
+    //Validate and Sanitise Fields
+    body('name', 'Tag name required')
+    .trim()
+    .isLength({min:3}).withMessage('Min length 3 characters')
+    .isAlpha().withMessage("Tag can't contain numbers")
+    .escape(),
+
+    //Process request
+    (req, res, next) => {
+
+      //Extract validation errors
+      const errors = validationResult(req);
+
+      //Create a tag object with escaped trimmed data and old ID.
+      var tag = new Tag(
+        {name: req.body.name,
+        _id: req.params.id
+      });
+
+      if (!errors.isEmpty()) {
+        //There are errors.  Render form again.
+          res.render('tag_form', { title: 'Edit Tag', tag: tag, errors: errors.array() })
+          return;
+      }
+      else {
+        //Data from form is valid.  Update the record.
+        Tag.findByIdAndUpdate(req.params.id, tag, {}, function (err, thetag) {
+          if (err) { return next(err); }
+          //successful - redirect to tag detail page
+          res.redirect(thetag.url);
+        });
+      }
+    }
+];
