@@ -1,8 +1,8 @@
-var BlogPost = require('../models/blogpost');
-var Author = require('../models/author')
-var Tag = require('../models/tag')
+const BlogPost = require('../models/blogpost');
+const Author = require('../models/author')
+const Tag = require('../models/tag')
 
-var async = require('async');
+const async = require('async');
 const { body,validationResult } = require('express-validator');
 
 //Function to display site homepage
@@ -102,7 +102,7 @@ console.log(req.body.tag)
       const errors = validationResult(req);
 console.log(errors)
       // Create a Blog Post object with escaped and trimmed data.
-      var blogpost = new BlogPost(
+      let blogpost = new BlogPost(
         { title: req.body.title,
           author: req.body.author,
           summary: req.body.summary,
@@ -215,14 +215,14 @@ exports.blogpost_update_get = function(req, res, next) {
       }, function(err, results) {
           if (err) { return next(err); }
           if (results.blogpost==null) { // No results.
-              var err = new Error('Blog Post not found');
+              let err = new Error('Blog Post not found');
               err.status = 404;
               return next(err);
           }
           // Success.
           // Mark our selected genres as checked.
-          for (var all_t_iter = 0; all_t_iter < results.tags.length; all_t_iter++) {
-              for (var blogpost_t_iter = 0; blogpost_t_iter < results.blogpost.tags.length; blogpost_t_iter++) {
+          for (let all_t_iter = 0; all_t_iter < results.tags.length; all_t_iter++) {
+              for (let blogpost_t_iter = 0; blogpost_t_iter < results.blogpost.tags.length; blogpost_t_iter++) {
                   if (results.tags[all_t_iter]._id.toString()===results.blogpost.tags[blogpost_t_iter]._id.toString()) {
                       results.tags[all_t_iter].checked='true';
                   }
@@ -261,7 +261,7 @@ exports.blogpost_update_post = [
       const errors = validationResult(req);
 
       // Create a BLogPost object with escaped/trimmed data and old id.
-      var blogpost = new BlogPost(
+      let blogpost = new BlogPost(
         { title: req.body.title,
           author: req.body.author,
           body: req.body.body,

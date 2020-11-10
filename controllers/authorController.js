@@ -1,7 +1,7 @@
 //Require the model used to access and update data
-var Author = require('../models/author');
-var BlogPost = require('../models/blogpost')
-var async = require('async');
+const Author = require('../models/author');
+const BlogPost = require('../models/blogpost')
+const async = require('async');
 const { body,validationResult } = require('express-validator');
 const { DateTime } = require('luxon');
 
@@ -32,7 +32,7 @@ exports.author_detail = function(req, res) {
 }, function(err, results) {
     if (err) { return next(err); } // Error in API usage.
     if (results.author==null) { // No results.
-        var err = new Error('Author not found');
+        let err = new Error('Author not found');
         err.status = 404;
         return next(err);
     }
@@ -83,7 +83,7 @@ exports.author_create_post = [
           // Data from form is valid.
 
           // Create an Author object with escaped and trimmed data.
-          var author = new Author(
+          let author = new Author(
               {
                   first_name: req.body.first_name,
                   family_name: req.body.family_name,
@@ -160,7 +160,7 @@ exports.author_update_get = function(req, res, next) {
       }, function(err, results) {
           if (err) { return next(err); }
           if (results.author==null) { // No results.
-              var err = new Error('Author not found');
+              let err = new Error('Author not found');
               err.status = 404;
               return next(err);
           }
@@ -188,7 +188,7 @@ exports.author_update_post = [
       const errors = validationResult(req);
 
       //Create an author object with escaped trimmed data and old ID.
-      var author = new Author(
+      let author = new Author(
         {
             first_name: req.body.first_name,
             family_name: req.body.family_name,

@@ -32,7 +32,7 @@ exports.tag_detail = function(req, res, next) {
   }, function(err, results) {
     if(err) {return next(err); }
     if (results.tag == null) { //No results.
-      var err = new Error('Tags not found');
+      let err = new Error('Tags not found');
       err.status = 404;
       return next(err);
     }
@@ -65,7 +65,7 @@ exports.tag_create_post =  [
     const errors = validationResult(req);
 
     // Create a genre object with escaped and trimmed data.
-    var tag = new Tag(
+    let tag = new Tag(
       { name: req.body.name }
     );
 
@@ -163,7 +163,7 @@ exports.tag_update_get = function(req, res, next) {
       }, function(err, results) {
           if (err) { return next(err); }
           if (results.tag==null) { // No results.
-              var err = new Error('Tag not found');
+              let err = new Error('Tag not found');
               err.status = 404;
               return next(err);
           }
@@ -191,7 +191,7 @@ exports.tag_update_post = [
       const errors = validationResult(req);
 
       //Create a tag object with escaped trimmed data and old ID.
-      var tag = new Tag(
+      let tag = new Tag(
         {name: req.body.name,
         _id: req.params.id
       });
