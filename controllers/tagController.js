@@ -126,7 +126,7 @@ exports.tag_delete_get = function(req, res, next) {
 exports.tag_delete_post = function(req, res, next) {
   async.parallel({
       tag: function(callback) {
-        Tag.findById(req.body.authorid).exec(callback)
+        Tag.findById(req.body.tagid).exec(callback)
       },
       tags_blogposts: function(callback) {
         BlogPost.find({ 'tags': req.body.tagid }).exec(callback)

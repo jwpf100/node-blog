@@ -145,15 +145,55 @@ console.log(errors)
   }
 ];
 
+
+
 //Display blogpost delete form on GET
-exports.blogpost_delete_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: blogpost delete GET');
+exports.blogpost_delete_get = function(req, res, next) {
+
+  async.parallel({
+    blogpost: function(callback) {
+      BlogPost.findById(req.params.id)
+      .populate('author')
+      .exec(callback)
+    }
+
+}, function(err, results) {
+    if(err) { return next(err); }
+    if (results.blogpost == null) {
+      //no results, 
+      res.redirect('blog/blogposts');
+    }
+    //Successful so render
+    res.render('blogpost_delete', {title: 'Delete Blog Post', blogpost: results.blogpost } );
+  });
 };
 
+
+/*
+app.get("/", async (req, res) => {
+  const posts = await Post.find();
+  const blogPosts = await BlogPost.find();
+  res.render('index', { posts: posts, blogPosts: blogPosts })
+});
+*/
+
 //Handle blogpost delete form on POST
-exports.blogpost_delete_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: blogpost delete POST');
+exports.blogpost_delete_post = function(req, res, next) {
+  async.parallel({
+    blogpost: function(callback) {
+      BlogPost.findById(req.body.blogpostid)
+        .exec(callback)
+    },
+  }, function(err, results) {
+    if (err) { return next(err);}
+    //success
+    BlogPost.findByIdAndRemove(req.body.blogpostid, function deleteBlogPost(err) {
+      if (err) { return next(err);}
+      res.redirect('/blog/blogposts')
+    })
+  });
 };
+
 
 //Display blogpost update form on GET
 exports.blogpost_update_get = function(req, res, next) {
