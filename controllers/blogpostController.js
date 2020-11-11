@@ -58,7 +58,7 @@ exports.blogpost_detail = function(req, res) {
 };
 
 //Display blogpost create form on GET
-exports.blogpost_create_get = function(req, res, next) { 
+exports.create_blogpost_form = function(req, res, next) { 
       
   // Get all authors and genres, which we can use for adding to our Blog Post.
   async.parallel({
@@ -76,7 +76,7 @@ exports.blogpost_create_get = function(req, res, next) {
 };
 
 //Handle blogpost create on POST
-exports.blogpost_create_post = [
+exports.create_blogpost = [
   // Convert the genre to an array.
   (req, res, next) => {
       if(!(req.body.tag instanceof Array)){
@@ -85,7 +85,6 @@ exports.blogpost_create_post = [
           else
           req.body.tag = new Array(req.body.tag);
       }
-console.log(req.body.tag)
       next();
   },
 
@@ -100,7 +99,6 @@ console.log(req.body.tag)
       
       // Extract the validation errors from a request.
       const errors = validationResult(req);
-console.log(errors)
       // Create a Blog Post object with escaped and trimmed data.
       let blogpost = new BlogPost(
         { title: req.body.title,
@@ -148,7 +146,7 @@ console.log(errors)
 
 
 //Display blogpost delete form on GET
-exports.blogpost_delete_get = function(req, res, next) {
+exports.delete_blogpost_form = function(req, res, next) {
 
   async.parallel({
     blogpost: function(callback) {
@@ -178,7 +176,7 @@ app.get("/", async (req, res) => {
 */
 
 //Handle blogpost delete form on POST
-exports.blogpost_delete_post = function(req, res, next) {
+exports.delete_blogpost = function(req, res, next) {
   async.parallel({
     blogpost: function(callback) {
       BlogPost.findById(req.body.blogpostid)
@@ -196,7 +194,7 @@ exports.blogpost_delete_post = function(req, res, next) {
 
 
 //Display blogpost update form on GET
-exports.blogpost_update_get = function(req, res, next) {
+exports.update_blogpost_form = function(req, res, next) {
 
   // Get blog post, authors and genres for form.
   async.parallel({
@@ -234,7 +232,7 @@ exports.blogpost_update_get = function(req, res, next) {
 };
 
 // Handle blogpost update on POST.
-exports.blogpost_update_post = [
+exports.update_blogpost = [
 
   // Convert the tag to an array
   (req, res, next) => {

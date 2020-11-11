@@ -25,6 +25,7 @@ exports.author_detail = function(req, res) {
         Author.findById(req.params.id)
           .exec(callback)
     },
+    //Resolves to an array of BlogPosts (Mongoose model) objects that only contain the title and summary fields.
     authors_blogposts: function(callback) {
       BlogPost.find({ 'author': req.params.id },'title summary')
       .exec(callback)
@@ -42,30 +43,35 @@ exports.author_detail = function(req, res) {
 };
 
 // Display Author create form on GET.
-exports.author_create_get = function(req, res, next) {       
+exports.create_author_form = function(req, res, next) {       
   res.render('author_form', { title: 'Create Author'});
 };
 
 
 // Handle Author create on POST.
-exports.author_create_post = [
+exports.create_author = [
 
   // Validate and sanitise fields.
   body('first_name').trim().isLength({ min: 1 }).escape().withMessage('First name must be specified.')
       .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
   body('family_name').trim().isLength({ min: 1 }).escape().withMessage('Family name must be specified.')
       .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
-  body('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601().toDate(),
-  body('date_of_death', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601().toDate(),
+  body('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601(),
+  body('date_of_death', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601(),
   
   // Process request after validation and sanitization.
   (req, res, next) => {
 
       //provide edited dates
-      
-      let author_temp = {
+  
+      console.log(req.body.date_of_birth)
+      console.log(req.body.date_of_death)
+
+      const author_data = {
         first_name: req.body.first_name,
         family_name: req.body.family_name,
+        date_of_birth: req.body.date_of_birth,
+        date_of_death: req.body.date_of_death,
         date_birth_form: DateTime.fromJSDate(req.body.date_of_birth).toISODate(),
         date_death_form: DateTime.fromJSDate(req.body.date_of_death).toISODate()
       }   
@@ -76,20 +82,14 @@ exports.author_create_post = [
 
       if (!errors.isEmpty()) {
           // There are errors. Render form again with sanitized values/errors messages.
-          res.render('author_form', { title: 'Create Author', author: author_temp, errors: errors.array() });
+          res.render('author_form', { title: 'Create Author', author: author_data, errors: errors.array() });
           return;
       }
       else {
           // Data from form is valid.
 
           // Create an Author object with escaped and trimmed data.
-          let author = new Author(
-              {
-                  first_name: req.body.first_name,
-                  family_name: req.body.family_name,
-                  date_of_birth: req.body.date_of_birth,
-                  date_of_death: req.body.date_of_death
-              });
+          let author = new Author(author_data);
           author.save(function (err) {
               if (err) { return next(err); }
               // Successful - redirect to new author record.
@@ -100,7 +100,8 @@ exports.author_create_post = [
 ];
 
 // Display Author delete form on GET.
-exports.author_delete_get = function(req, res, next) {
+//Nb. Author cannot be deleted if they have existing blog posts. Check below in place for blogposts by the author and logic in the author_delete page that hides the delete button and asks the user to delete blog posts before trying to delete the author.
+exports.delete_author_form = function(req, res, next) {
 
   async.parallel({
       author: function(callback) {
@@ -117,29 +118,31 @@ exports.author_delete_get = function(req, res, next) {
       // Successful, so render.
       res.render('author_delete', { title: 'Delete Author', author: results.author, author_blogposts: results.authors_blogposts } );
   });
-
 };
 
 // Handle Author delete on POST.
-exports.author_delete_post = function(req, res, next) {
+//Nb. Author cannot be deleted if they have existing blog posts. 
+exports.delete_author = function(req, res, next) {
   async.parallel({
       author: function(callback) {
         Author.findById(req.body.authorid).exec(callback)
       },
+      //Check for blog posts by the author.
       authors_blogposts: function(callback) {
         BlogPost.find({ 'author': req.body.authorid }).exec(callback)
       },
   }, function(err, results) {
       if (err) { return next(err); }
       
+      
       // Success
       if (results.authors_blogposts.length > 0) {
-          // Author has books. Render in same way as for GET route.
+          // The author has blog posts so cannot be deleted. Render the page the same as with the GET route - logic in the author_delete page that hides the delete button and asks the user to delete blog posts before trying to delete the author.
           res.render('author_delete', { title: 'Delete Author', author: results.author, author_blogposts: results.authors_blogposts } );
           return;
       }
       else {
-          // Author has no books. Delete object and redirect to the list of authors.
+          // Author has no blog posts so ok to delete object and redirect to the list of authors.
           Author.findByIdAndRemove(req.body.authorid, function deleteAuthor(err) {
               if (err) { return next(err); }
               // Success - go to author list
@@ -150,7 +153,7 @@ exports.author_delete_post = function(req, res, next) {
 };
 
 // Display Author update form on GET.
-exports.author_update_get = function(req, res, next) {
+exports.update_author_form = function(req, res, next) {
 
   async.parallel({
       author: function(callback) {
@@ -166,12 +169,11 @@ exports.author_update_get = function(req, res, next) {
           }
           // Success.
           res.render('author_form', { title: 'Edit Author', author: results.author });
-          console.log(results.author)
       });
 };
 
 // Handle Author update on POST.
-exports.author_update_post = [
+exports.update_author = [
 
   //Validate and Sanitise Fields
   body('first_name').trim().isLength({ min: 1 }).escape().withMessage('First name must be specified.')

@@ -23,7 +23,7 @@ exports.tag_detail = function(req, res, next) {
       Tag.findById(req.params.id)  // params.id refers to the url request which has the id at the end
         .exec(callback);
     },
-
+    //Resolves to an array of BlogPosts (Mongoose model) objects that only contain the title and summary fields. 
     tag_blogposts: function(callback) {
       BlogPost.find({ 'tags': req.params.id })  // params.id refers to the url request which has the id at the end
         .exec(callback)
@@ -42,12 +42,12 @@ exports.tag_detail = function(req, res, next) {
 };
 
 // Display tag create form on GET.
-exports.tag_create_get = function(req, res, next) {
+exports.create_tag_form = function(req, res, next) {
   res.render('tag_form', { title: 'Create New Tag' });
 };
 
 // Handle tag create on POST.
-exports.tag_create_post =  [
+exports.create_tag =  [
    
   // Validate and santise the name field.
   //body('name', 'Tag name required').trim().isLength({ min: 3 }).escape(),
@@ -64,7 +64,7 @@ exports.tag_create_post =  [
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
-    // Create a genre object with escaped and trimmed data.
+    // Create a tag object with escaped and trimmed data.
     let tag = new Tag(
       { name: req.body.name }
     );
@@ -77,20 +77,20 @@ exports.tag_create_post =  [
     }
     else {
       // Data from form is valid.
-      // Check if Genre with same name already exists.
+      // Check if tag with same name already exists.
       Tag.findOne({ 'name': req.body.name })
         .exec( function(err, found_tag) {
           if (err) { return next(err); }
 
           if (found_tag) {
-             // Genre exists, redirect to its detail page.
+             // tag exists, redirect to its detail page.
             res.redirect(found_tag.url);
           }
           else {
 
             tag.save(function (err) {
               if (err) { return next(err); }
-               // Genre saved. Redirect to genre detail page.
+               // tag saved. Redirect to tag detail page.
               res.redirect(tag.url);
             });
 
@@ -102,7 +102,8 @@ exports.tag_create_post =  [
 ];
 
 // Display tag delete form on GET.
-exports.tag_delete_get = function(req, res, next) {
+//Nb. Tag cannot be deleted if existing blog posts contain the tag. Check below in place for blogposts including the tag and logic in the tag_delete page that hides the delete button and asks the user to delete blog posts before trying to delete the tag.
+exports.delete_tag_form = function(req, res, next) {
 
   async.parallel({
       tag: function(callback) {
@@ -123,7 +124,8 @@ exports.tag_delete_get = function(req, res, next) {
 };
 
 // Handle tag delete on POST.
-exports.tag_delete_post = function(req, res, next) {
+//Nb. Tag cannot be deleted if used in existing blog posts. 
+exports.delete_tag = function(req, res, next) {
   async.parallel({
       tag: function(callback) {
         Tag.findById(req.body.tagid).exec(callback)
@@ -136,12 +138,12 @@ exports.tag_delete_post = function(req, res, next) {
       
       // Success
       if (results.tags_blogposts.length > 0) {
-          // Author has books. Render in same way as for GET route.
+          // Blog posts use the tag so cannot be deleted. Render the page the same as with the GET route - logic in the tag_delete page that hides the delete button and asks the user to delete blog posts before trying to delete the tag.
           res.render('tag_delete', { title: 'Delete Tag', tag: results.tag, tag_blogposts: results.tags_blogposts } );
           return;
       }
       else {
-          // Author has no books. Delete object and redirect to the list of authors.
+          // No blogposts with the tag. Delete object and redirect to the list of tags.
           Tag.findByIdAndRemove(req.body.tagid, function deleteTag(err) {
               if (err) { return next(err); }
               // Success - go to author list
@@ -152,9 +154,9 @@ exports.tag_delete_post = function(req, res, next) {
 };
 
 // Display tag update form on GET.
-exports.tag_update_get = function(req, res, next) {
+exports.update_tag_form = function(req, res, next) {
 
-  // Get blog post, authors and genres for form.
+  // Get tags for form.
   async.parallel({
       tag: function(callback) {
           Tag.findById(req.params.id)
@@ -175,7 +177,7 @@ exports.tag_update_get = function(req, res, next) {
 
 
 // Handle tag update on POST.
-exports.tag_update_post = [
+exports.update_tag = [
 
     //Validate and Sanitise Fields
     body('name', 'Tag name required')
