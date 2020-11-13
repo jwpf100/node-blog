@@ -1,41 +1,43 @@
 //Import Node_libraries
 
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
 //manage .env data
-var dotenv = require("dotenv")
-dotenv.config()
+const dotenv = require('dotenv');
+dotenv.config();
 
 //Import route handlers
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var blogRouter = require('./routes/blog');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const blogRouter = require('./routes/blog');
 
 // Create App
 
-var app = express();
+const app = express();
 
 //Connect to MongoDB
 
-const mongoose = require('mongoose')
-const url = 'mongodb://127.0.0.1:27017/node-blog'
+const mongoose = require('mongoose');
+const url = 'mongodb://127.0.0.1:27017/node-blog';
 
-mongoose.connect(url, { useNewUrlParser: true , useUnifiedTopology: true});
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const db = mongoose.connection
+const db = mongoose.connection;
 
-db.once('open', _ => {
-  console.log('Database Node-Blog connected:', url)
-})
+db.once('open', () => {
+  // eslint-disable-next-line no-console
+  console.log('Database Node-Blog connected:', url);
+});
 
-db.on('error', err => {
-  console.error('connection error:', err)
-})
+db.on('error', (err) => {
+  // eslint-disable-next-line no-console
+  console.error('connection error:', err);
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -56,12 +58,12 @@ app.use('/users', usersRouter);
 app.use('/blog', blogRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

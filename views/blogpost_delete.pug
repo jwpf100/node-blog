@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1 #{title}: #{blogpost.title}
+  p by: #{blogpost.author.name}
+  p= blogpost.summary
+  p= blogpost.post_date
+  
+    p Do you really want to delete this Blog Post?
+    
+    form(method='POST' action='')
+      div.form-group
+        input#blogpostid.form-control(type='hidden',name='blogpostid', required='true', value=blogpost._id )
+
+      button.btn.btn-primary(type='submit') Delete

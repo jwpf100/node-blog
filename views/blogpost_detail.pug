@@ -5,6 +5,7 @@ block content
   
   p #[strong Author:] 
     a(href=blogpost.author.url) #{blogpost.author.name}
+  p #[strong Blog:] #{blogpost.body}
   p #[strong Summary:] #{blogpost.summary}
   p #[strong Posted:] #{blogpost.post_date_edited}
   p #[strong Tags:] 
@@ -13,3 +14,8 @@ block content
       if index < blogpost.tags.length - 1
         |, 
   p #[strong Status:] #{blogpost.status}
+    hr
+  p
+    a(href=blogpost.url+'/delete') Delete Blog Post
+  p
+    a(href=blogpost.url+'/update') Update Blog Post
