@@ -9,7 +9,7 @@ const tag_controller = require('../controllers/tagController');
 /// BLOGPOST ROUTES ///
 
 // GET catalog home page
-router.get('/', blogpost_controller.index)
+router.get('/', blogpost_controller.index);
 
 // GET request for creating a blogpost. NOTE This must come before routes that display BlogPosts (uses id).
 router.get('/blogpost/create', blogpost_controller.create_blogpost_form);
