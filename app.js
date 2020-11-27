@@ -23,8 +23,10 @@ const app = express();
 //Connect to MongoDB
 
 const mongoose = require('mongoose');
-const url = 'mongodb://127.0.0.1:27017/node-blog';
-
+//Local DB
+//const url = 'mongodb://127.0.0.1:27017/node-blog';
+//Cloud Atlas
+const url = `mongodb+srv://${process.env.CLOUDDB_USERNAME}:${process.env.CLOUDDB_PASSWORD}@nodeblogjoe.iuune.mongodb.net/<dbname>?retryWrites=true&w=majority`;
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
