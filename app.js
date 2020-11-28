@@ -5,6 +5,8 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const compression = require('compression');
+const helmet = require('helmet');
 
 //manage .env data
 const dotenv = require('dotenv');
@@ -20,13 +22,22 @@ const blogRouter = require('./routes/blog');
 
 const app = express();
 
+// Use helmet to protect against well known vulnerabilities
+app.use(helmet());
+
 //Connect to MongoDB
 
 const mongoose = require('mongoose');
 //Local DB
 //const url = 'mongodb://127.0.0.1:27017/node-blog';
 //Cloud Atlas
-const url = `mongodb+srv://${process.env.CLOUDDB_USERNAME}:${process.env.CLOUDDB_PASSWORD}@nodeblogjoe.iuune.mongodb.net/<dbname>?retryWrites=true&w=majority`;
+//dev_db_url is the 'development' database.
+const dev_db_url = 'mongodb://127.0.0.1:27017/node-blog';
+//const pro_db_url = `mongodb+srv://${process.env.CLOUDDB_USERNAME}:${process.env.CLOUDDB_PASSWORD}@nodeblogjoe.iuune.mongodb.net/<dbname>?retryWrites=true&w=majority`;
+const pro_db_url = 'mongodb+srv://jwpf100:Y3yHZ9wRqbBjQCsa@nodeblogjoe.iuune.mongodb.net/<dbname>?retryWrites=true&w=majority';
+//const url = process.env.MONGODB_URI || dev_db_url;
+const url = pro_db_url || dev_db_url;
+
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
@@ -51,6 +62,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(compression()); //Compress all routes
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Add (previously imported) route handling
