@@ -6,6 +6,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const compression = require('compression');
+const helmet = require('helmet');
 
 //manage .env data
 const dotenv = require('dotenv');
@@ -20,6 +21,9 @@ const blogRouter = require('./routes/blog');
 // Create App
 
 const app = express();
+
+// Use helmet to protect against well known vulnerabilities
+app.use(helmet());
 
 //Connect to MongoDB
 
