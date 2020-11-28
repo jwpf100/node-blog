@@ -34,7 +34,8 @@ const mongoose = require('mongoose');
 //dev_db_url is the 'development' database.
 const dev_db_url = 'mongodb://127.0.0.1:27017/node-blog';
 const pro_db_url = `mongodb+srv://${process.env.CLOUDDB_USERNAME}:${process.env.CLOUDDB_PASSWORD}@nodeblogjoe.iuune.mongodb.net/<dbname>?retryWrites=true&w=majority`;
-const url = process.env.MONGODB_URI || dev_db_url;
+//const url = process.env.MONGODB_URI || dev_db_url;
+const url = pro_db_url || dev_db_url;
 
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
