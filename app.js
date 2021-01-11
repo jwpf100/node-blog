@@ -30,21 +30,22 @@ app.use(helmet());
 const mongoose = require('mongoose');
 //Local DB
 //const url = 'mongodb://127.0.0.1:27017/node-blog';
-//Cloud Atlas
+
+//Cloud Atlas - production db
 //dev_db_url is the 'development' database.
 const dev_db_url = 'mongodb://127.0.0.1:27017/node-blog';
+//pro_db_url is the 'production' database.
 const pro_db_url = `mongodb+srv://${process.env.CLOUDDB_USERNAME}:${process.env.CLOUDDB_PASSWORD}@nodeblogjoe.iuune.mongodb.net/<dbname>?retryWrites=true&w=majority`;
-//const pro_db_url =
-//  'mongodb+srv://jwpf100:Y3yHZ9wRqbBjQCsa@nodeblogjoe.iuune.mongodb.net/<dbname>?retryWrites=true&w=majority';
 
-//const url = process.env.MONGODB_URI || dev_db_url;
-const url = pro_db_url || dev_db_url;
+const url = process.env.NODE_ENV !== 'development' ? pro_db_url : dev_db_url;
 
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
 
 db.once('open', () => {
+  // eslint-disable-next-line no-console
+  console.log('Node Environment: ' + process.env.NODE_ENV);
   // eslint-disable-next-line no-console
   console.log('Database Node-Blog connected:', url);
 });
