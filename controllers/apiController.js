@@ -4,7 +4,7 @@ const async = require('async');
 
 //Display list of all blog posts
 exports.blogpost_list = function (req, res) {
-  BlogPost.find({}, 'title summary author')
+  BlogPost.find({})
     .populate('author')
     .exec(function (err, list_blogposts) {
       if (err) {
