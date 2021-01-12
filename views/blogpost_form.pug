@@ -30,6 +30,9 @@ block content
       label(for='body') Blog Body:
       textarea#body.form-control(type='textarea', placeholder='Main blog text' name='body' required='true') #{undefined===blogpost ? '' : blogpost.body}
     div.form-group
+      label(for='image_filename') Image Filename:
+      textarea#image_filename.form-control(type='textarea', placeholder='blog1.png' name='image_filename' required='true') #{undefined===blogpost ? '' : blogpost.image_filename}
+    div.form-group
       label Tags:
       div
         for tag in tags

@@ -7,6 +7,7 @@ block content
     a(href=blogpost.author.url) #{blogpost.author.name}
   p #[strong Blog:] #{blogpost.body}
   p #[strong Summary:] #{blogpost.summary}
+  p #[strong Image Filename:] #{blogpost.image_filename}
   p #[strong Posted:] #{blogpost.post_date_edited}
   p #[strong Tags:] 
     each val, index in blogpost.tags
