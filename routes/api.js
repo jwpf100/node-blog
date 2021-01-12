@@ -1,10 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const cors = require('cors');
 
 //Require controller modules
 const api_controller = require('../controllers/apiController');
 
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  optionsSuccessStatus: 200,
+};
+
 //GET request for all blogposts
-router.get('/blogposts', api_controller.blogpost_list);
+router.get('/blogposts', cors(corsOptions), api_controller.blogpost_list);
 
 module.exports = router;
