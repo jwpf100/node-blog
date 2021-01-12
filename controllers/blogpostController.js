@@ -135,6 +135,7 @@ exports.create_blogpost = [
       author: req.body.author,
       summary: req.body.summary,
       body: req.body.body,
+      image_filename: req.body.image_filename,
       tags: req.body.tag,
     });
 
@@ -156,7 +157,7 @@ exports.create_blogpost = [
             return next(err);
           }
 
-          // Mark our selected genres as checked.
+          // Mark our selected tags as checked.
           for (let i = 0; i < results.tags.length; i++) {
             if (blogpost.tag.indexOf(results.tags[i]._id) > -1) {
               results.tags[i].checked = 'true';

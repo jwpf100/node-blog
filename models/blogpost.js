@@ -16,6 +16,7 @@ const BlogPostSchema = new Schema({
     enum: ['Published', 'Draft', 'Submitted'],
     default: 'Published',
   },
+  image_filename: { type: String, required: true },
 });
 
 //Nb.  Included status, default should be draft but can add functionality in to have a review process
