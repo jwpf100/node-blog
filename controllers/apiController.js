@@ -4,8 +4,8 @@ const async = require('async');
 
 //Display list of all blog posts
 exports.blogpost_list = function (req, res) {
-  BlogPost.find({}, 'title summary author')
-    .populate('author')
+  BlogPost.find({})
+    .populate('author tags')
     .exec(function (err, list_blogposts) {
       if (err) {
         return async.nextTick(err);
