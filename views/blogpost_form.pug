@@ -31,10 +31,10 @@ block content
     //-   textarea#body.form-control(placeholder='Main blog text' name='body' required='true' type='textarea')
       
     div.form-group
-      label(for='body') About me:
+      label(for='body') Article body:
       input(name="body" type="hidden" required='true') 
       div#editor-container
-        p Blog Main.
+        //- p Blog Main.
     div.form-group
       label(for='image_filename') Image Filename:
       textarea#image_filename.form-control(type='textarea', placeholder='blog1.png' name='image_filename' required='true') #{undefined===blogpost ? '' : blogpost.image_filename}
