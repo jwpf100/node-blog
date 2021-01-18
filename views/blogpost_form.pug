@@ -26,9 +26,15 @@ block content
     div.form-group
       label(for='summary') Summary:
       textarea#summary.form-control(type='textarea', placeholder='Summary' name='summary' required='true') #{undefined===blogpost ? '' : blogpost.summary}
+    //- div.form-group
+    //-   label(for='body') Blog Body:
+    //-   textarea#body.form-control(placeholder='Main blog text' name='body' required='true' type='textarea')
+      
     div.form-group
-      label(for='body') Blog Body:
-      textarea#body.form-control(type='textarea', placeholder='Main blog text' name='body' required='true') #{undefined===blogpost ? '' : blogpost.body}
+      label(for='body') Article body:
+      input(name="body" type="hidden" required='true') 
+      div#editor-container
+        //- p Blog Main.
     div.form-group
       label(for='image_filename') Image Filename:
       textarea#image_filename.form-control(type='textarea', placeholder='blog1.png' name='image_filename' required='true') #{undefined===blogpost ? '' : blogpost.image_filename}
@@ -45,3 +51,6 @@ block content
     ul
       for error in errors
         li!= error.msg
+        
+  script(src='/libraries/quill.js')
+  script(src='/javascripts/rtequill.js')

@@ -66,10 +66,14 @@ exports.blogpost_detail = function (req, res) {
         return next(err);
       }
       //Successful so render
-      res.render('blogpost_detail', {
-        title: results.blogpost.title,
-        blogpost: results.blogpost,
-      });
+      res.render(
+        'blogpost_detail',
+        {
+          title: results.blogpost.title,
+          blogpost: results.blogpost,
+        },
+        console.log('New')
+      );
     }
   );
 };
