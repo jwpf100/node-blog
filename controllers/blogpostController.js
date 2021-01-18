@@ -334,7 +334,7 @@ exports.update_blogpost = [
     .trim()
     .isLength({ min: 1 })
     .escape(),
-  body('body', 'Body must not be empty.').trim().isLength({ min: 1 }).escape(),
+  //body('body', 'Body must not be empty.').trim().isLength({ min: 1 }).escape(),
   body('tag.*').escape(),
 
   // Process request after validation and sanitization.
@@ -346,8 +346,10 @@ exports.update_blogpost = [
     let blogpost = new BlogPost({
       title: req.body.title,
       author: req.body.author,
-      body: req.body.body,
       summary: req.body.summary,
+      body: req.body.body,
+      body_delta: req.body.body_delta,
+      image_filename: req.body.image_filename,
       tags: typeof req.body.tag === 'undefined' ? [] : req.body.tag,
       _id: req.params.id, //This is required, or a new ID will be assigned!
     });

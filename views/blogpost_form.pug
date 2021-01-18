@@ -33,9 +33,13 @@ block content
     div.form-group
       label(for='body') Article body:
       input(name="body" type="hidden" required='true') 
-      input(name="body_delta" type="hidden" required='true') 
+      if undefined===blogpost
+        input(name="body_delta" type="hidden" required='true' value='') 
+      else
+        input(name="body_delta" type="hidden" required='true' value=blogpost.body_delta)
       div#editor-container
         //- p Blog Main.
+
     div.form-group
       label(for='image_filename') Image Filename:
       textarea#image_filename.form-control(type='textarea', placeholder='blog1.png' name='image_filename' required='true') #{undefined===blogpost ? '' : blogpost.image_filename}
