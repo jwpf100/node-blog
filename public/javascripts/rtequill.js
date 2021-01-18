@@ -16,6 +16,9 @@ form.onsubmit = () => {
   var body = document.querySelector('input[name=body]');
   body.value = JSON.stringify(quill.root.innerHTML);
 
+  var body_delta = document.querySelector('input[name=body_delta]');
+  body_delta.value = JSON.stringify(quill.getContents());
+
   form.submit();
 };
 
