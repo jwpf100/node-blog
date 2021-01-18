@@ -14,7 +14,7 @@ const form = document.querySelector('form');
 form.onsubmit = () => {
   // Populate hidden form on submit
   var body = document.querySelector('input[name=body]');
-  body.value = JSON.stringify(quill.root.innerHTML);
+  body.value = quill.root.innerHTML;
 
   var body_delta = document.querySelector('input[name=body_delta]');
   body_delta.value = JSON.stringify(quill.getContents());

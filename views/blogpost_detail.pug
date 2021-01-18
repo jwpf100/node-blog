@@ -5,9 +5,7 @@ block content
   
   p #[strong Author:] 
     a(href=blogpost.author.url) #{blogpost.author.name}
-  p #[strong Blog:]#{blogpost.body}
-  div(hidden id='inputBodyHtml') #{blogpost.body}
-  div#outputBodyHtml
+  p #[strong Article Body:] !{blogpost.body}
   p #[strong Summary:] #{blogpost.summary}
   p #[strong Image Filename:] #{blogpost.image_filename}
   p #[strong Posted:] #{blogpost.post_date_edited}
@@ -22,4 +20,4 @@ block content
     a(href=blogpost.url+'/delete') Delete Blog Post
   p
     a(href=blogpost.url+'/update') Update Blog Post
-  script(src='/javascripts/temp.js')
+    
