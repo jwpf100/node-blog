@@ -8,6 +8,7 @@ const BlogPostSchema = new Schema({
   author: { type: Schema.Types.ObjectId, ref: 'Author', required: true },
   summary: { type: String, required: true },
   body: { type: String, required: true },
+  body_delta: { type: String, required: true },
   post_date: { type: Date, default: Date.now() },
   tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
   status: {

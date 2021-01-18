@@ -139,6 +139,7 @@ exports.create_blogpost = [
       author: req.body.author,
       summary: req.body.summary,
       body: req.body.body,
+      body_delta: req.body.body_delta,
       image_filename: req.body.image_filename,
       tags: req.body.tag,
     });
