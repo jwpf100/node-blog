@@ -13,4 +13,7 @@ const corsOptions = {
 //GET request for all blogposts
 router.get('/blogposts', cors(corsOptions), api_controller.blogpost_list);
 
+//GET request for single blogpost
+router.get('/blogpost/:id', cors(corsOptions), api_controller.blogpost_detail);
+
 module.exports = router;
