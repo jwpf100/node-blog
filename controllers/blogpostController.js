@@ -66,14 +66,10 @@ exports.blogpost_detail = function (req, res) {
         return next(err);
       }
       //Successful so render
-      res.render(
-        'blogpost_detail',
-        {
-          title: results.blogpost.title,
-          blogpost: results.blogpost,
-        },
-        console.log('New')
-      );
+      res.render('blogpost_detail', {
+        title: results.blogpost.title,
+        blogpost: results.blogpost,
+      });
     }
   );
 };
@@ -123,10 +119,8 @@ exports.create_blogpost = [
     .trim()
     .isLength({ min: 1 })
     .escape(),
-  body('summary', 'Summary must not be empty.')
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
+  body('summary', 'Summary must not be empty.').trim().isLength({ min: 1 }),
+  // .escape(),
   body('tag.*').escape(),
 
   // Process request after validation and sanitization.
@@ -330,10 +324,8 @@ exports.update_blogpost = [
     .trim()
     .isLength({ min: 1 })
     .escape(),
-  body('summary', 'Summary must not be empty.')
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
+  body('summary', 'Summary must not be empty.').trim().isLength({ min: 1 }),
+  // .escape(),
   //body('body', 'Body must not be empty.').trim().isLength({ min: 1 }).escape(),
   body('tag.*').escape(),
 
