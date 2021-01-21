@@ -1,4 +1,6 @@
 const BlogPost = require('../models/blogpost');
+const Author = require('../models/author');
+const Tag = require('../models/tag');
 
 const async = require('async');
 
@@ -39,4 +41,30 @@ exports.blogpost_detail = function (req, res) {
       res.json(results.blogpost);
     }
   );
+};
+
+// Display list of all Authors.
+exports.author_list = function (req, res, next) {
+  Author.find()
+    .sort([['family_name', 'ascending']])
+    .exec(function (err, list_authors) {
+      if (err) {
+        return next(err);
+      }
+      //Succesful
+      res.json(list_authors);
+    });
+};
+
+// Display list of all tags.
+exports.tag_list = function (req, res, next) {
+  Tag.find()
+    .sort([['name', 'ascending']])
+    .exec(function (err, list_tags) {
+      if (err) {
+        return next(err);
+      }
+      //succesful
+      res.json(list_tags);
+    });
 };

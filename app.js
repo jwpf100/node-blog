@@ -26,6 +26,10 @@ const app = express();
 // Use helmet to protect against well known vulnerabilities
 app.use(helmet());
 
+//Use cors for Cross-origin resource sharing
+const cors = require('cors');
+app.use(cors());
+
 //Connect to MongoDB
 
 const mongoose = require('mongoose');
