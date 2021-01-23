@@ -48,7 +48,7 @@ AuthorSchema.virtual('date_death_form').get(function () {
 
 //Virtual to set a unique URL for the author based on it's _id
 AuthorSchema.virtual('url').get(function () {
-  return '/blog/author/' + this._id;
+  return '/blog/admin/author/' + this._id;
 });
 
 //Export the module
