@@ -8,7 +8,7 @@ const TagSchema = new Schema({
 
 // Virtual for tag's URL
 TagSchema.virtual('url').get(function () {
-  return '/blog/tag/' + this._id;
+  return '/blog/admin/tag/' + this._id;
 });
 
 //Export model
