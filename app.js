@@ -74,7 +74,7 @@ app.use(compression()); //Compress all routes
 
 const server_root = '/blog';
 
-app.use('/blog', express.static(path.join(__dirname, 'public')));
+app.use('/blog', express.static('public'));
 
 //Add (previously imported) route handling
 
