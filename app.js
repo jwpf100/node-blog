@@ -72,14 +72,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(compression()); //Compress all routes
 
-app.use(express.static(path.join(__dirname, '/html/blog/public')));
+app.use(express.static('public'));
 
 //Add (previously imported) route handling
 
 const server_root = '/blog';
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+//app.use('/', indexRouter);
+//app.use('/users', usersRouter);
 app.use(`${server_root}/admin`, blogRouter);
 app.use(`${server_root}/api`, apiRouter);
 
