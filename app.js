@@ -14,7 +14,7 @@ dotenv.config();
 
 //Import route handlers
 
-//const indexRouter = require('./routes/index');
+const indexRouter = require('./routes/index');
 //const usersRouter = require('./routes/users');
 const blogRouter = require('./routes/blog');
 const apiRouter = require('./routes/api');
@@ -78,7 +78,7 @@ app.use('/blog', express.static('public'));
 
 //Add (previously imported) route handling
 
-//app.use('/', indexRouter);
+app.use('/', indexRouter);
 //app.use('/users', usersRouter);
 app.use(`${server_root}/admin`, blogRouter);
 app.use(`${server_root}/api`, apiRouter);
