@@ -36,7 +36,7 @@ const mongoose = require('mongoose');
 //Local DB
 //const url = 'mongodb://127.0.0.1:27017/node-blog';
 
-//Cloud Atlas - production db
+//Cloud Atlas - production dbx
 //dev_db_url is the 'development' database.
 const dev_db_url = 'mongodb://127.0.0.1:27017/node-blog';
 //pro_db_url is the 'production' database.
@@ -72,11 +72,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(compression()); //Compress all routes
 
-app.use(express.static(path.join(__dirname, 'public')));
+const server_root = '/blog';
+
+app.use('/blog', express.static(path.join(__dirname, 'public')));
 
 //Add (previously imported) route handling
-
-const server_root = '/blog';
 
 //app.use('/', indexRouter);
 //app.use('/users', usersRouter);
