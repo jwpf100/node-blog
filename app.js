@@ -14,8 +14,8 @@ dotenv.config();
 
 //Import route handlers
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+//const indexRouter = require('./routes/index');
+//const usersRouter = require('./routes/users');
 const blogRouter = require('./routes/blog');
 const apiRouter = require('./routes/api');
 
@@ -72,7 +72,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(compression()); //Compress all routes
 
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 //Add (previously imported) route handling
 
