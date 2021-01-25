@@ -76,10 +76,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Add (previously imported) route handling
 
+const server_root = '/blog';
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/blog', blogRouter);
-app.use('/api', apiRouter);
+app.use(`${server_root}/admin`, blogRouter);
+app.use(`${server_root}/api`, apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

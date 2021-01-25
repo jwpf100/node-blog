@@ -24,7 +24,7 @@ const BlogPostSchema = new Schema({
 
 // Virtual for book's URL
 BlogPostSchema.virtual('url').get(function () {
-  return '/blog/blogpost/' + this._id;
+  return '/blog/admin/blogpost/' + this._id;
 });
 
 // Virtual for author's date of birth
