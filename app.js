@@ -72,9 +72,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(compression()); //Compress all routes
 
-const server_root = '/blog';
+const server_root = '/blog-backend';
 
-app.use('/blog', express.static('public'));
+app.use('/blog-backend', express.static('public'));
 
 //Add (previously imported) route handling
 
