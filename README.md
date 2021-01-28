@@ -1,8 +1,8 @@
 ## Blog App - Node/Express Backend
 
 The backend of my blogging application.  Has two key functions:
-1 - To allow users to create, read, update and destroy blogposts.
-2 - To act as an API providing blog data to my blog front-end. 
+- To allow users to create, read, update and destroy blogposts.
+- To act as an API providing blog data to my blog front-end. 
 
 Created using Node, Express, JavaScript, Bootstrap, CSS, Pug for templating, and [Quilljs](https://quilljs.com/) for rich text editing.
 
