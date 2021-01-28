@@ -6,7 +6,11 @@ The backend of my blogging application.  Has two key functions:
 
 Created using Node, Express, JavaScript, Bootstrap, CSS, Pug for templating, and [Quilljs](https://quilljs.com/) for rich text editing.
 
-## Project Screen Shot(s)
+## Project Status
+
+MVP.  Next steps are to add authentication for admin users, improve security, add functionality to select header posts, and 4 leading posts.
+
+## Project Screen Shots
 
 <img src="https://user-images.githubusercontent.com/64267174/106020061-418f6700-60bb-11eb-9d43-a048c59d3e09.png" width="500"> 
 
