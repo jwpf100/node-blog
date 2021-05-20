@@ -49,7 +49,9 @@ To Get API Output:
 
 To Deploy
 
-scp -i ~/dev/security/key-pair/jwpf-mainserver.pem -r ~/dev/node-blog/\* jwpf100@ec2-3-19-87-9.us-east-2.compute.amazonaws.com:/var/www/api.josephfletcher.co.uk/html/blog-backend
+Switch mode in .env to production
+
+`scp -i ~/dev/security/key-pair/jwpf-mainserver.pem -r ~/dev/node-blog/\* jwpf100@ec2-3-19-87-9.us-east-2.compute.amazonaws.com:/var/www/api.josephfletcher.co.uk/html/blog-backend`
 
 ## Reflection
 
