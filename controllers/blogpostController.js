@@ -21,7 +21,7 @@ exports.index = function (req, res) {
     },
     function (err, results) {
       res.render('index', {
-        title: 'Node Blog Home',
+        title: 'Blog Admin Home',
         error: err,
         data: results,
       });

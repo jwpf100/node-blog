@@ -2,14 +2,14 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #[em Joe's Node Blog], a very basic Express website developed to learn about express, Node and MongoDB using a tutorial example on the Mozilla Developer Network.
+  p This is the Blog Admin page.  Here you have all the functionality to manage your own blog.
 
   h1 Dynamic content
 
   if error
     p Error getting dynamic content.
   else
-    p The library has the following record counts:
+    p The blog database has the following record counts:
 
     ul
       li #[strong Blogposts:] !{data.blogpost_count}
